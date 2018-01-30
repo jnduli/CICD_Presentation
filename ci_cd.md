@@ -34,15 +34,85 @@ root of the repository. The simplest ci/cd is of the form:
 
 <!-- TODO: Example that prints hello world -->
 
+******
+
 -> # JS ci/cd example <-
 Here is the file we use for our front end:
 
-<!-- TODO: include ci/cd file for front end  -->
+~~~
+image: node:9.4.0
+
+test:
+  stage: test
+  script:
+    - npm install
+    - npm run unit
+
+build site:
+  stage: build
+  script:
+    - npm install --progress=false
+    - npm run build
+  only:
+    - develop
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist
+
+deploy:
+  image: alpine
+  stage: deploy
+  script:
+    - apk add --no-cache rsync openssh
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan jnduli.co.ke >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - rsync -rav --delete dist/ rookie@jnduli.co.ke:/home/rookie/projects/dev_mradi_frontend
+  only: 
+    - develop
+~~~
+
+******
 
 -> # Django Backend Example <-
 Here is what we use for our back end
 
-<!--TODO: include ci/cd for backend  -->
+~~~
+    image: python:3.6
+
+    test:
+      stage: test
+      script:
+        - apt-get update -qy
+        - apt-get install -y python-dev python-pip
+        - pip install -r requirements.txt
+        - python manage.py makemigrations
+        - python manage.py migrate
+        - python manage.py test
+
+    deploy:
+      image: alpine
+      stage: deploy
+      script:
+        - apk add --no-cache openssh ansible
+        - eval $(ssh-agent -s)
+        - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - ssh-keyscan jnduli.co.ke >> ~/.ssh/known_hosts
+        - chmod 644 ~/.ssh/known_hosts
+        - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\tForwardAgent yes\n\n" > ~/.ssh/config'
+        - ansible-playbook -i 'jnduli.co.ke,' -u 'rookie' --extra-vars="ansible_become_pass=$ROOKIE_PASSWORD" ansible/basic_deploy.yml
+      only: 
+        - develop
+~~~
+
+
 
 *****
 
