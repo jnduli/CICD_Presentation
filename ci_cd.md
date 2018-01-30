@@ -12,9 +12,9 @@ Delivery.
 
 It is provided by the following platforms:
 
-+ Bitbucket : Get 50 minutes free
-+ GIthub : 
-+ Gitlab
++ Bitbucket : Has an inbuilt ci cd.
++ GIthub : Travis CI most popular but can work with other tools
++ Gitlab: Has inbuilt ci cd tool
 
 We'll focus on Gitlab today
 
@@ -44,5 +44,36 @@ Here is what we use for our back end
 
 <!--TODO: include ci/cd for backend  -->
 
+*****
+
+-> # Bitbucket Example <-
+Bitbucket ci/cd framework is different from the gillab one. Some
+of the differences are:
+
++ Automatic ssh integration into pipeline ( This is both a good
+  and a bad thing)
++ Specifying branch specific tasks
++ No support for artifacts
++ Monthly limit of 50 minutes vs gitlab's 20000 minutes
+
+*****
+
+-> # Example on latex compilation <-
+
+~~~
+    image: tianon/latex
+
+    pipelines:
+      branches:
+        structured:
+          - step:
+              script:
+                - apt-get update && apt-get install -y rsync openssh-server
+                - cd src/John
+                - pdflatex ndulicv.tex
+                - ls
+                - eval $(ssh-agent -s)
+                - rsync ndulicv.pdf rookie@jnduli.co.ke:/home/rookie/projects/cv/
+~~~
 
 
