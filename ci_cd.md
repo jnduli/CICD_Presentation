@@ -22,9 +22,12 @@ We'll focus on Gitlab today
 
 -> # Gitlab # <-
 
-Competitor to github
-Pretty cool place to work from
+Gitlab CI considered leader in CI/CD in 
+[Forrester Wave evaluation](https://reprints.forrester.com/#/assets/2/921/RES137261/reports)
+It started as a competitor to github
 I get 20000 minutes CI/CD so its ok free projects
+Anyone remember their huge db backup fail last year ??
+[incident](https://about.gitlab.com/2017/02/01/gitlab-dot-com-database-incident/)
 
 ******
 
