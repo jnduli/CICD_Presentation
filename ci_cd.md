@@ -32,7 +32,15 @@ I get 20000 minutes CI/CD so its ok free projects
 To start with ci/cd on gitlab add a .gitlab-ci.yml file at the
 root of the repository. The simplest ci/cd is of the form:
 
-<!-- TODO: Example that prints hello world -->
+~~~
+
+    image: alpine
+
+    Hello:
+      script:
+        - echo "Hello World"
+
+~~~
 
 ******
 
