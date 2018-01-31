@@ -1,4 +1,6 @@
-%title: CI/CD - Presentation %author: jnduli.co.ke 
+%title: CI/CD - Presentation 
+%author: jnduli.co.ke 
+
 -> # CI/CD # <-
 
 Presenter: John Nduli
